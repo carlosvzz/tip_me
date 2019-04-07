@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tip_me/widgets/separador.dart';
+import 'package:intl/intl.dart';
+import 'widgets/separador.dart';
+import 'number_pad.dart';
+import 'widgets/router.dart';
 
 class MyHomePage extends StatefulWidget {
   final String title;
@@ -11,13 +14,78 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //NumberFormat formatter = NumberFormat("##0.00");
-  TextEditingController billTotalController = TextEditingController();
-  int tipPercent = 10, tipSplit = 1;
-  double billTotal = 0.0;
-  double tip = 0.0;
-  double totalWithTip = 0.0;
-  double totalEach = 0.0;
+  NumberFormat formatter = NumberFormat("##0.00");
+
+  double montoCuenta = 0.0;
+  double montoPropina = 0.0;
+  double montoTotal = 0.0;
+  double montoPersona = 0.0;
+
+  double propinaPorc = 12.5;
+  int numPersonas = 1;
+
+  /// Calculo General de montos
+  calcularBaseCuenta(double total) {
+    total = (total ?? montoCuenta);
+    setState(() {
+      montoCuenta = total;
+      //montoCuentaController.text = "${formatter.format(montoCuenta)}";
+
+      montoPropina = total * (propinaPorc / 100);
+      montoTotal = total + montoPropina;
+      montoPersona = (montoTotal / numPersonas);
+    });
+  }
+
+  // Aumenta / Disminuye % propina en un bloques de 0.5 
+  double actualizarPropinaPorc(String id) {
+    int valorBase = propinaPorc.toInt();
+    double valorDecimal = propinaPorc - valorBase; 
+    double valorRetorno;
+
+
+    debugPrint(valorBase.toString());
+    debugPrint(valorDecimal.toString());
+
+    if (id == "+") {
+      if (valorDecimal < 0.5) {
+        valorRetorno =  valorBase.toDouble() + 0.5;
+      } else {
+        valorRetorno = valorBase.toDouble() + 1.0;
+      }
+
+    } else { // Restar
+      if (valorDecimal == 0.0) {
+        valorRetorno =  valorBase.toDouble() - 0.5;
+      } else if (valorDecimal <= 0.5) {
+        valorRetorno = valorBase.toDouble();
+      } else {
+        valorRetorno = valorBase.toDouble() + 0.5;
+      }
+
+    }
+    debugPrint(valorRetorno.toString());
+    return valorRetorno;
+  }
+
+  /// Calculo de monto de personas
+  calcularMontoPersona() {
+    setState(() {
+      montoPersona = (montoTotal / numPersonas);
+    });
+  }
+
+  /// Calcular Redondeo del total
+  calcularBaseTotal(double total) {
+    total = (total ?? montoTotal);
+    setState(() {
+      montoPropina = total - montoCuenta;
+      propinaPorc = (montoPropina / montoCuenta) * 100;
+
+      montoTotal = total.toDouble();
+      montoPersona = (montoTotal / numPersonas);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +104,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 RaisedButton(
                   //elevation: 0.0,
                   onPressed: () async {
-                    // var value = await Navigator.push(
-                    //   context,
-                    //   ScaleRoute(widget:  NumberPad(
-                    //     billTotal,
-                    //     normalStyle: Theme.of(context).textTheme.display2,
-                    //     errorStyle: Theme.of(context).accentTextTheme.display2,
-                    //   )),
-                    // );
-                    // if(value != null){
-                    // //  calculateBill(value);
-                    // }
+                    var value = await Navigator.push(
+                      context,
+                      ScaleRoute(widget: NumberPad('MONTO CUENTA', montoCuenta)),
+                    );
+                    if (value != null) {
+                      calcularBaseCuenta(value);
+                    }
                   },
                   color: Theme.of(context).accentColor,
                   child: Text(
@@ -58,8 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Text(
-                  "0.00",
-                  //"${formatter.format(billTotal)}",
+                  "${formatter.format(montoCuenta)}",
                   style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
                 ),
@@ -70,36 +133,34 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               children: <Widget>[
                 Text(
-                  //"tip @ $tipPercent%",
                   "% Propina",
                   style: Theme.of(context).textTheme.body1,
                 ),
                 Spacer(),
                 IconButton(
-                  iconSize: 37.0,
+                  iconSize: 40.0,
                   onPressed: () {
-                    // if (tipPercent > 0) {
-                    //   tipPercent--;
-                    //   calculateBill(null);
-                    // }
+                    if (propinaPorc > 0) {
+                      propinaPorc = actualizarPropinaPorc('-');
+                      calcularBaseCuenta(null);
+                    }
                   },
                   icon: Icon(
                     Icons.remove_circle,
                   ),
                 ),
                 Text(
-                  //"${formatter.format(tip)}",
-                  "12.50%",
+                  "${formatter.format(propinaPorc)}",
                   style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
                 ),
                 IconButton(
-                  iconSize: 37.0,
+                  iconSize: 40.0,
                   onPressed: () {
-                    // if (tipPercent < 100) {
-                    //   tipPercent++;
-                    //   calculateBill(null);
-                    // }
+                    if (propinaPorc < 100) {
+                     propinaPorc = actualizarPropinaPorc('+');
+                      calcularBaseCuenta(null);
+                    }
                   },
                   icon: Icon(
                     Icons.add_circle,
@@ -117,8 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: Theme.of(context).textTheme.body1,
                 ),
                 Text(
-                  //"${formatter.format(tip)}",
-                  "0.00",
+                  "${formatter.format(montoPropina)}",
                   style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
                 ),
@@ -133,17 +193,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 RaisedButton(
                   //elevation: 0.0,
                   onPressed: () async {
-                    // var value = await Navigator.push(
-                    //   context,
-                    //   ScaleRoute(widget:  NumberPad(
-                    //     billTotal,
-                    //     normalStyle: Theme.of(context).textTheme.display2,
-                    //     errorStyle: Theme.of(context).accentTextTheme.display2,
-                    //   )),
-                    // );
-                    // if(value != null){
-                    // //  calculateBill(value);
-                    // }
+                    var value = await Navigator.push(
+                      context,
+                      ScaleRoute(
+                          widget: NumberPad(
+                        'T O T A L',montoTotal
+                      )),
+                    );
+                    if (value != null) {
+                      calcularBaseTotal(value);
+                    }
                   },
                   color: Theme.of(context).accentColor,
                   child: Text(
@@ -155,30 +214,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Text(
-                  //"${formatter.format(totalWithTip)}",
-                  "0.00",
+                  "${formatter.format(montoTotal)}",
                   style: Theme.of(context).textTheme.title,
                   textAlign: TextAlign.right,
                 ),
               ],
             ),
+            // Redondeo
             Container(
               alignment: Alignment.centerRight,
               child: RaisedButton(
-                //elevation: 0.0,
-                onPressed: () async {
-                  // var value = await Navigator.push(
-                  //   context,
-                  //   ScaleRoute(widget:  NumberPad(
-                  //     billTotal,
-                  //     normalStyle: Theme.of(context).textTheme.display2,
-                  //     errorStyle: Theme.of(context).accentTextTheme.display2,
-                  //   )),
-                  // );
-                  // if(value != null){
-                  // //  calculateBill(value);
-                  // }
-                },
+                onPressed: () => calcularBaseTotal(montoTotal.ceilToDouble()),
                 color: Theme.of(context).accentColor,
                 child: Text(
                   "REDONDEO",
@@ -200,30 +246,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Spacer(),
                 IconButton(
-                  iconSize: 37.0,
+                  iconSize: 40.0,
                   onPressed: () {
-                    // if (tipPercent > 0) {
-                    //   tipPercent--;
-                    //   calculateBill(null);
-                    // }
+                    if (numPersonas > 1) {
+                      numPersonas--;
+                      calcularMontoPersona();
+                    }
                   },
                   icon: Icon(
                     Icons.remove_circle,
                   ),
                 ),
                 Text(
-                  //"${formatter.format(tip)}",
-                  "1",
+                  numPersonas.toString(),
                   style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
                 ),
                 IconButton(
-                  iconSize: 37.0,
+                  iconSize: 40.0,
                   onPressed: () {
-                    // if (tipPercent < 100) {
-                    //   tipPercent++;
-                    //   calculateBill(null);
-                    // }
+                    if (numPersonas < 20) {
+                      numPersonas++;
+                      calcularMontoPersona();
+                    }
                   },
                   icon: Icon(
                     Icons.add_circle,
@@ -239,8 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: Theme.of(context).textTheme.body1,
                 ),
                 Text(
-                  //"${formatter.format(totalEach)}",
-                  "0.00",
+                  "${formatter.format(montoPersona)}",
                   style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
                 ),
@@ -251,16 +295,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
-
-/// Simple calculation of bill amounts
-calculateBill(double total) {
-  // total = (total ?? billTotal);
-  // setState(() {
-  //   billTotal = total;
-  //   billTotalController.text = "${formatter.format(billTotal)}";
-  //   tip = (total / 100) * tipPercent;
-  //   totalWithTip = total + tip;
-  //   totalEach = (totalWithTip / tipSplit);
-  // });
 }

@@ -8,13 +8,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tip Me',
-      theme: myTheme(),
+      theme: _myTheme(),
       home: MyHomePage(title: 'Tip Me'),
     );
   }
 }
 
-ThemeData myTheme() {
+ThemeData _myTheme() {
   return ThemeData(
     brightness: Brightness.dark,
     //Texans
@@ -22,11 +22,16 @@ ThemeData myTheme() {
     accentColor: Color(0xFFB82633),
     //fontFamily: 'Roboto',
     textTheme: TextTheme(
-      headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-      title: TextStyle(fontSize: 27.0, fontStyle: FontStyle.italic, color: Colors.green),
-      body1: TextStyle(fontSize: 17.0,),
-      body2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-      button: TextStyle(fontSize: 17.0,),
+      headline: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.white),
+      title: TextStyle(fontSize: 30.0, fontStyle: FontStyle.italic, color: Colors.green),
+      body1: TextStyle(fontSize: 20.0,),
+      body2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
+      button: TextStyle(fontSize: 20.0,),
+    ),
+    accentTextTheme: TextTheme(
+      headline: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.black),
+      body2: TextStyle(fontSize: 20.0, fontStyle: FontStyle.italic, color: Colors.red),
+      button: TextStyle(fontSize: 27.0,fontWeight: FontWeight.bold),
     ),
   );
 }
