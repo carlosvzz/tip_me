@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tip_me/widgets/separador.dart';
 
 class MyHomePage extends StatefulWidget {
   final String title;
@@ -28,11 +29,12 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: <Widget>[
+            // Monto Cuenta
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 RaisedButton(
-                  elevation: 0.0,
+                  //elevation: 0.0,
                   onPressed: () async {
                     // var value = await Navigator.push(
                     //   context,
@@ -48,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   color: Theme.of(context).accentColor,
                   child: Text(
-                    "Monto cuenta",
-                    //style: Theme.of(context).primaryTextTheme.title,
+                    "MONTO CUENTA",
+                    style: Theme.of(context).textTheme.button,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(17.0),
@@ -58,8 +60,50 @@ class _MyHomePageState extends State<MyHomePage> {
                 Text(
                   "0.00",
                   //"${formatter.format(billTotal)}",
-                  //style: Theme.of(context).primaryTextTheme.headline,
+                  style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+            Separador(),
+            // PROPINA
+            Row(
+              children: <Widget>[
+                Text(
+                  //"tip @ $tipPercent%",
+                  "% Propina",
+                  style: Theme.of(context).textTheme.body1,
+                ),
+                Spacer(),
+                IconButton(
+                  iconSize: 37.0,
+                  onPressed: () {
+                    // if (tipPercent > 0) {
+                    //   tipPercent--;
+                    //   calculateBill(null);
+                    // }
+                  },
+                  icon: Icon(
+                    Icons.remove_circle,
+                  ),
+                ),
+                Text(
+                  //"${formatter.format(tip)}",
+                  "12.50%",
+                  style: Theme.of(context).textTheme.body2,
+                  textAlign: TextAlign.right,
+                ),
+                IconButton(
+                  iconSize: 37.0,
+                  onPressed: () {
+                    // if (tipPercent < 100) {
+                    //   tipPercent++;
+                    //   calculateBill(null);
+                    // }
+                  },
+                  icon: Icon(
+                    Icons.add_circle,
+                  ),
                 ),
               ],
             ),
@@ -69,48 +113,121 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 Text(
                   //"tip @ $tipPercent%",
-                  "tip @ %",
-                  //style: Theme.of(context).textTheme.headline,
+                  "Monto Propina",
+                  style: Theme.of(context).textTheme.body1,
                 ),
                 Text(
                   //"${formatter.format(tip)}",
-                  "tip",
-                  //style: Theme.of(context).primaryTextTheme.headline,
+                  "0.00",
+                  style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
                 ),
               ],
             ),
+            SizedBox(height: 17.0),
+            // TOTAL
+            Separador(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  "Total with tip",
-                  style: Theme.of(context).textTheme.headline,
+                RaisedButton(
+                  //elevation: 0.0,
+                  onPressed: () async {
+                    // var value = await Navigator.push(
+                    //   context,
+                    //   ScaleRoute(widget:  NumberPad(
+                    //     billTotal,
+                    //     normalStyle: Theme.of(context).textTheme.display2,
+                    //     errorStyle: Theme.of(context).accentTextTheme.display2,
+                    //   )),
+                    // );
+                    // if(value != null){
+                    // //  calculateBill(value);
+                    // }
+                  },
+                  color: Theme.of(context).accentColor,
+                  child: Text(
+                    "T O T A L",
+                    style: Theme.of(context).textTheme.button,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(17.0),
+                  ),
                 ),
                 Text(
                   //"${formatter.format(totalWithTip)}",
-                  "totalWithTip",
-                  //style: Theme.of(context).primaryTextTheme.headline,
+                  "0.00",
+                  style: Theme.of(context).textTheme.title,
                   textAlign: TextAlign.right,
                 ),
               ],
             ),
             Container(
-                margin: EdgeInsets.all(15.0),
-                height: 1.0,
-                color: Theme.of(context).accentColor),
+              alignment: Alignment.centerRight,
+              child: RaisedButton(
+                //elevation: 0.0,
+                onPressed: () async {
+                  // var value = await Navigator.push(
+                  //   context,
+                  //   ScaleRoute(widget:  NumberPad(
+                  //     billTotal,
+                  //     normalStyle: Theme.of(context).textTheme.display2,
+                  //     errorStyle: Theme.of(context).accentTextTheme.display2,
+                  //   )),
+                  // );
+                  // if(value != null){
+                  // //  calculateBill(value);
+                  // }
+                },
+                color: Theme.of(context).accentColor,
+                child: Text(
+                  "REDONDEO",
+                  style: Theme.of(context).textTheme.button,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(17.0),
+                ),
+              ),
+            ),
+
+            Separador(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Split between",
-                  style: Theme.of(context).textTheme.headline,
+                  "# Personas",
+                  style: Theme.of(context).textTheme.body1,
+                ),
+                Spacer(),
+                IconButton(
+                  iconSize: 37.0,
+                  onPressed: () {
+                    // if (tipPercent > 0) {
+                    //   tipPercent--;
+                    //   calculateBill(null);
+                    // }
+                  },
+                  icon: Icon(
+                    Icons.remove_circle,
+                  ),
                 ),
                 Text(
-                  //"$tipSplit",
-                  "tipSplit",
-                  //style: Theme.of(context).primaryTextTheme.headline,
+                  //"${formatter.format(tip)}",
+                  "1",
+                  style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
+                ),
+                IconButton(
+                  iconSize: 37.0,
+                  onPressed: () {
+                    // if (tipPercent < 100) {
+                    //   tipPercent++;
+                    //   calculateBill(null);
+                    // }
+                  },
+                  icon: Icon(
+                    Icons.add_circle,
+                  ),
                 ),
               ],
             ),
@@ -118,97 +235,16 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Cost each",
-                  style: Theme.of(context).textTheme.headline,
+                  "Monto x Persona",
+                  style: Theme.of(context).textTheme.body1,
                 ),
                 Text(
                   //"${formatter.format(totalEach)}",
-                  "total Each",
-                  //style: Theme.of(context).primaryTextTheme.headline,
+                  "0.00",
+                  style: Theme.of(context).textTheme.body2,
                   textAlign: TextAlign.right,
                 ),
               ],
-            ),
-            Container(
-                margin: EdgeInsets.all(15.0),
-                height: 1.0,
-                color: Theme.of(context).accentColor),
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          "Tip Percentage",
-                          //style: Theme.of(context).primaryTextTheme.title,
-                          textAlign: TextAlign.right,
-                        ),
-                        IconButton(
-                          iconSize: 50.0,
-                          onPressed: () {
-                            // if (tipPercent > 0) {
-                            //   tipPercent--;
-                            //   calculateBill(null);
-                            // }
-                          },
-                          icon: Icon(
-                            Icons.remove_circle,
-                          ),
-                        ),
-                        IconButton(
-                          iconSize: 50.0,
-                          onPressed: () {
-                            // if (tipPercent < 100) {
-                            //   tipPercent++;
-                            //   calculateBill(null);
-                            // }
-                          },
-                          icon: Icon(
-                            Icons.add_circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          "Split between",
-                          //style: Theme.of(context).primaryTextTheme.title,
-                          textAlign: TextAlign.right,
-                        ),
-                        IconButton(
-                          iconSize: 50.0,
-                          onPressed: () {
-                            // if (tipSplit > 1) {
-                            //   tipSplit--;
-                            //   calculateBill(null);
-                            // }
-                          },
-                          icon: Icon(
-                            Icons.remove_circle,
-                          ),
-                        ),
-                        IconButton(
-                          iconSize: 50.0,
-                          onPressed: () {
-                            // if (tipSplit < 50) {
-                            //   tipSplit++;
-                            //   calculateBill(null);
-                            // }
-                          },
-                          icon: Icon(
-                            Icons.add_circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
             ),
           ],
         ),
@@ -217,16 +253,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
- /// Simple calculation of bill amounts
-  calculateBill(double total) {
-    total = (total ?? billTotal);
-    setState(() {
-      billTotal = total;
-      billTotalController.text = "${formatter.format(billTotal)}";
-      tip = (total / 100) * tipPercent;
-      totalWithTip = total + tip;
-      totalEach = (totalWithTip / tipSplit);
-    });
-  }
-
-
+/// Simple calculation of bill amounts
+calculateBill(double total) {
+  // total = (total ?? billTotal);
+  // setState(() {
+  //   billTotal = total;
+  //   billTotalController.text = "${formatter.format(billTotal)}";
+  //   tip = (total / 100) * tipPercent;
+  //   totalWithTip = total + tip;
+  //   totalEach = (totalWithTip / tipSplit);
+  // });
+}
